@@ -3,7 +3,9 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 
 const connectDB = require("./src/config/db");
+
 const authRoutes = require("./src/routes/auth.routes");
+const taskRoutes = require("./src/routes/task.routes");
 
 dotenv.config();
 
@@ -17,10 +19,19 @@ app.use(express.json());
 
 // routes
 app.use("/api/auth", authRoutes);
+app.use("/api/tasks", taskRoutes);
 
-// test route
+// health check
 app.get("/", (req, res) => {
   res.send("API running...");
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "API route not found",
+  });
 });
 
 // global error handler
